@@ -3,3 +3,17 @@
 
 #include "SubtitlesContent.h"
 
+void USubtitlesContent::SetDialogue(FString InDialogue)
+{
+	Line = InDialogue;
+}
+
+void USubtitlesContent::SetSpeaker(FText InSpeaker)
+{
+	Speaker = InSpeaker;
+}
+
+void USubtitlesContent::SetScreenTime(float InScreenTime)
+{
+	ScreenTime = InScreenTime;
+}

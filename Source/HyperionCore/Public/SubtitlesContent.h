@@ -21,7 +21,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Details", Meta = (ExposeOnSpawn=true))
 		FText Speaker;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Details", Meta = (ExposeOnSpawn=true))
-		FText Line;
+		FString Line;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Content", meta = (ExposeOnSpawn = true))
 		float ScreenTime;
@@ -30,4 +30,8 @@ public:
 		float BackgroundOpacity = 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Settings|Colors")
 		FLinearColor BackgroundColor = FLinearColor(0, 0, 0, BackgroundOpacity);
+
+	void SetDialogue(FString InDialogue);
+	void SetSpeaker(FText InSpeaker);
+	void SetScreenTime(float InScreenTime);
 };

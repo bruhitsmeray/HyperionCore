@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SubtitlesContent.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/VerticalBox.h"
 #include "SubtitlesHandler.generated.h"
 
 /**
@@ -21,4 +23,12 @@ public:
 		float ScreenTime = 3.5f;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Content")
 		FText Subtitle;
+
+	UFUNCTION(BlueprintCallable, Category="Subtitles")
+		void ConfigSubtitlesReferences(UVerticalBox* SubtitlesBox, TSubclassOf<USubtitlesContent> SubtitlesContentClass);
+	UFUNCTION(BlueprintCallable, Category="Subtitles")
+		static void SubtitlesLogic(USoundWave* AudioFile, FText InSpeaker, FString InDialogue, float InDuration);
+	UFUNCTION(BlueprintCallable, Category="Subtitles")
+		static void PlayAudioWithSubtitles(USoundWave* Audio, FText Speaker, FString Dialogue, float Duration, float& ReturnValue);
+		static void PlayAudio(USoundBase* AudioToPlay);
 };
