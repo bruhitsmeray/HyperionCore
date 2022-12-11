@@ -23,15 +23,18 @@ void USubtitlesHandler::SubtitlesLogic(USoundWave* AudioFile, FText InSpeaker, F
 			SubtitlesBoxReference->GetChildAt(0)->RemoveFromParent();
 		}
 		
-		if(IsValid(World)) {
+		if(IsValid(World) && IsValid(SubtitlesBoxReference)) {
 			SubtitlesContent = CreateWidget<USubtitlesContent>(World, SubtitlesContentReference);
 			SubtitlesContent->SetSpeaker(InSpeaker);
 			SubtitlesContent->SetDialogue(InDialogue);
 			SubtitlesContent->SetScreenTime(InDuration);
 			SubtitlesContent->SetRenderTransformAngle(180);
 			SubtitlesBoxReference->AddChildToVerticalBox(SubtitlesContent);
-			PlayAudio(AudioFile);
-			UE_LOG(LogTemp, Display, TEXT("Playing audio: %s with a duration of: %f."), *AudioFile->GetName(), AudioFile->Duration);
+			
+			if(AudioFile) {
+				PlayAudio(AudioFile);
+				UE_LOG(LogTemp, Display, TEXT("Playing audio: %s with a duration of: %f."), *AudioFile->GetName(), AudioFile->Duration);
+			}
 		}
 	}
 }
@@ -48,11 +51,11 @@ void USubtitlesHandler::PlayAudio(USoundBase* AudioToPlay)
 
 void USubtitlesHandler::PlayAudioWithSubtitles(USoundWave* Audio, FText Speaker, FString Dialogue, float Duration, float& ReturnValue)
 {
-	if(Audio->IsValidLowLevel())
+	if(IsValid(Audio))
 	{
-		if(!Audio->SpokenText.IsEmpty())
+		if(Dialogue.IsEmpty() && !Audio->Subtitles.GetData()->Text.IsEmpty())
 		{
-			Dialogue = Audio->SpokenText;
+			Dialogue = Audio->Subtitles.GetData()->Text.ToString();
 		}
 
 		if(Duration == 0)
