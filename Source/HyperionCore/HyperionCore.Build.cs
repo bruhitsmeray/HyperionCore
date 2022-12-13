@@ -26,6 +26,8 @@ public class HyperionCore : ModuleRules
 			new string[]
 			{
 				"Core",
+				"HyperionUI",
+				"KonsolePlugin",
 				"UMG"
 				// ... add other public dependencies that you statically link with here ...
 			}
