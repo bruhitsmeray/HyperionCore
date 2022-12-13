@@ -24,7 +24,7 @@ void AHyperionGameMode::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AHyperionGameMode::ConnectToDiscord(int clientID)
+void AHyperionGameMode::ConnectToDiscord(int64 clientID)
 {
 	auto result = discord::Core::Create(clientID, DiscordCreateFlags_NoRequireDiscord, &core);
 }
