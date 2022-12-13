@@ -10,16 +10,22 @@ public class HyperionCore : ModuleRules
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
-				// ... add public include paths required here ...
+				"D:\\Clones\\Decay\\Plugins\\HyperionCore\\Source\\HyperionCore\\Discord\\"
 			}
-			);
+		);
+
+		PublicAdditionalLibraries.AddRange(
+			new string[] {
+				"D:\\Clones\\Decay\\Plugins\\HyperionCore\\Binaries\\Win64\\discord_game_sdk.dll.lib"
+			}
+		);
 				
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
 				// ... add other private include paths required here ...
 			}
-			);
+		);
 			
 		
 		PublicDependencyModuleNames.AddRange(
@@ -31,7 +37,7 @@ public class HyperionCore : ModuleRules
 				"UMG"
 				// ... add other public dependencies that you statically link with here ...
 			}
-			);
+		);
 			
 		
 		PrivateDependencyModuleNames.AddRange(
@@ -43,7 +49,7 @@ public class HyperionCore : ModuleRules
 				"SlateCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
-			);
+		);
 		
 		
 		DynamicallyLoadedModuleNames.AddRange(
@@ -51,6 +57,6 @@ public class HyperionCore : ModuleRules
 			{
 				// ... add any modules that your module loads dynamically here ...
 			}
-			);
+		);
 	}
 }
