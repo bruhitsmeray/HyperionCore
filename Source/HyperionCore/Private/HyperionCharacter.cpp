@@ -2,7 +2,6 @@
 
 
 #include "HyperionCharacter.h"
-
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -57,7 +56,7 @@ AHyperionCharacter::AHyperionCharacter()
 	HUDWidget->SetupAttachment(HUDSpringArm);
 	HUDWidget->SetRelativeLocation(FVector(120, 0, 0));
 	HUDWidget->SetWidgetSpace(EWidgetSpace::Screen);
-	HUDWidget->SetDrawSize(FVector2D(1920, 1080));
+	
 
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
 }
@@ -67,6 +66,11 @@ void AHyperionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AHyperionCharacter::SetDrawSizeByScreenResolution(FVector2D Resolution)
+{
+	HUDWidget->SetDrawSize(Resolution);
 }
 
 void AHyperionCharacter::FBeginGrab()
@@ -113,7 +117,7 @@ void AHyperionCharacter::FGrabLocation()
 	PhysicsHandle->SetTargetLocation(Camera->GetComponentLocation() + (Camera->GetForwardVector() * GrabDistance));
 	if(bIsHolding && IsValid(HitComponent))
 	{
-		HitComponent->SetWorldRotation(GetControlRotation(), false, nullptr);
+		HitComponent->SetRelativeRotation(FRotator(0, ObjectRotation, 0), false, nullptr);
 	}
 }
 
@@ -127,11 +131,33 @@ void AHyperionCharacter::FStopGrab()
 	}
 }
 
+void AHyperionCharacter::ToggleGrab()
+{
+	if(bIsHolding)
+	{
+		FStopGrab();
+	} else {
+		FBeginGrab();
+	}
+}
+
+void AHyperionCharacter::FRotateObject(float Axis)
+{
+	if(bIsHolding)
+	{
+		FRotator SelfRotation = HitComponent->GetRelativeRotation();
+		if(Axis < 0.0f) {
+			ObjectRotation = SelfRotation.Yaw - 10.0f;
+		} else if(Axis > 0.0f) {
+			ObjectRotation = SelfRotation.Yaw + 10.0f;
+		}
+	}
+}
+
 bool AHyperionCharacter::IsMoving()
 {
 	if((InputComponent->GetAxisValue(MoveForward) > 0 || InputComponent->GetAxisValue(MoveForward) < 0)
-		|| (InputComponent->GetAxisValue(MoveSide) > 0 || InputComponent->GetAxisValue(MoveSide) < 0))
-	{
+		|| (InputComponent->GetAxisValue(MoveSide) > 0 || InputComponent->GetAxisValue(MoveSide) < 0)) {
 		return true;
 	}
 	return false;
@@ -197,7 +223,7 @@ void AHyperionCharacter::StopSprint()
 void AHyperionCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
 }
 
 // Called to bind functionality to input
@@ -208,9 +234,13 @@ void AHyperionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis(MoveForward, this, &AHyperionCharacter::FVerticalMove);
 	PlayerInputComponent->BindAxis(MoveSide, this, &AHyperionCharacter::FHorizontalMove);
 	PlayerInputComponent->BindAxis(VerticalLook, this, &AHyperionCharacter::FVerticalLook);
-	PlayerInputComponent->BindAxis(VerticalLookOnController, this, &AHyperionCharacter::FVerticalLookOnController);
+	PlayerInputComponent->BindAxis(VerticalLookOnController, this,
+		&AHyperionCharacter::FVerticalLookOnController);
 	PlayerInputComponent->BindAxis(HorizontalLook, this, &AHyperionCharacter::FHorizontalLook);
-	PlayerInputComponent->BindAxis(HorizontalLookOnController, this, &AHyperionCharacter::FHorizontalLookOnController);
+	PlayerInputComponent->BindAxis(HorizontalLookOnController, this,
+		&AHyperionCharacter::FHorizontalLookOnController);
+
+	PlayerInputComponent->BindAxis("RotateInteraction", this, &AHyperionCharacter::FRotateObject);
 
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AHyperionCharacter::BeginSprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AHyperionCharacter::StopSprint);
@@ -218,6 +248,11 @@ void AHyperionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHyperionCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AHyperionCharacter::StopJumping);
 
-	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AHyperionCharacter::FBeginGrab);
-	PlayerInputComponent->BindAction("Use", IE_Released, this, &AHyperionCharacter::FStopGrab);
+	if(bToggleUse)
+	{
+		PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AHyperionCharacter::ToggleGrab);
+	} else {
+		PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AHyperionCharacter::FBeginGrab);
+		PlayerInputComponent->BindAction("Use", IE_Released, this, &AHyperionCharacter::FStopGrab);
+	}
 }
