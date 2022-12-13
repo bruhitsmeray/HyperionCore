@@ -5,7 +5,8 @@
 #include "discord.h"
 
 discord::Core* core{};
-auto result = discord::Core::Create(1052232496722497556, DiscordCreateFlags_NoRequireDiscord, &core);
+discord::Activity activity{};
+
 
 AHyperionGameMode::AHyperionGameMode()
 {
@@ -21,31 +22,24 @@ void AHyperionGameMode::Tick(float DeltaSeconds)
 void AHyperionGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-//	ConnectToDiscord();
-	discord::Activity Activity{};
-	Activity.GetTimestamps();
-	UpdateDiscordDetails("Cortex Island");
-	UpdateDiscordState("Exploring");
 }
 
-/*void AHyperionGameMode::ConnectToDiscord()
+void AHyperionGameMode::ConnectToDiscord(int clientID)
 {
-	auto result = discord::Core::Create(1052232496722497556, DiscordCreateFlags_NoRequireDiscord, &core);
-}*/
+	auto result = discord::Core::Create(clientID, DiscordCreateFlags_NoRequireDiscord, &core);
+}
 
 void AHyperionGameMode::UpdateDiscordState(FString State)
 {
 	const char* state = TCHAR_TO_ANSI(*State);
-	discord::Activity Activity{};
-	Activity.SetState(state);
-	core->ActivityManager().UpdateActivity(Activity, [](discord::Result result) {});
+	activity.SetState(state);
+	core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {});
 }
 
 void AHyperionGameMode::UpdateDiscordDetails(FString Details)
 {
 	const char* details = TCHAR_TO_ANSI(*Details);
-	discord::Activity Activity{};
-	Activity.SetDetails(details);
-	core->ActivityManager().UpdateActivity(Activity, [](discord::Result result) {});
+	activity.SetDetails(details);
+	core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {});
 }
 

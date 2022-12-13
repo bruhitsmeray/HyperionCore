@@ -20,7 +20,8 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	void ConnectToDiscord();
+	UFUNCTION(BlueprintCallable, Category="Discord")
+	static void ConnectToDiscord(int clientID);
 
 	UFUNCTION(BlueprintCallable, Category="Discord")
 	static void UpdateDiscordState(FString State);
