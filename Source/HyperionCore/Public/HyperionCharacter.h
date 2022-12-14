@@ -21,32 +21,30 @@ public:
 	// Sets default values for this character's properties
 	AHyperionCharacter();
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Preferences")
-		bool EnableLoggingThroughKonsolePlugin = false;
+	bool EnableLoggingThroughKonsolePlugin = false;
 	
-	void Log(FString Code, FString Message)
-	{
-		if(EnableLoggingThroughKonsolePlugin)
-		{
+	void Log(FString Code, FString Message) {
+		if(EnableLoggingThroughKonsolePlugin) {
 			UKonsole::PrintToConsole(GetName(), Code, Message);
 		}
 	};
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components")
-		UCameraComponent* Camera;
+	UCameraComponent* Camera;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Interaction")
-		UPhysicsHandleComponent* PhysicsHandle;
+	UPhysicsHandleComponent* PhysicsHandle;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category="Components|Flashlight")
-		USpringArmComponent* FlashSpringArm;
+	USpringArmComponent* FlashSpringArm;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere,Category="Components|HUD")
-		USpringArmComponent* HUDSpringArm;
+	USpringArmComponent* HUDSpringArm;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Flashlight")
-		USpotLightComponent* InnerLight;
+	USpotLightComponent* InnerLight;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Flashlight")
-		USpotLightComponent* OuterLight;
+	USpotLightComponent* OuterLight;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Interaction")
-		UPrimitiveComponent* HitComponent;
+	UPrimitiveComponent* HitComponent;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|HUD")
-		UWidgetComponent* HUDWidget;
+	UWidgetComponent* HUDWidget;
 
 protected:
 	// Called when the game starts or when spawned
@@ -54,45 +52,45 @@ protected:
 	bool bIsHolding = false;
 
 	UFUNCTION(BlueprintCallable, Category="Character|Interface")
-		void SetDrawSizeByScreenResolution(FVector2D Resolution);
+	void SetDrawSizeByScreenResolution(FVector2D Resolution);
 	
 	bool IsWalkingV;
 	bool IsWalkingH;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Camera")
-		FName VerticalLook = "MouseY";
+	FName VerticalLook = "MouseY";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Camera")
-		FName VerticalLookOnController = "LookRate";
+	FName VerticalLookOnController = "LookRate";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Camera")
-		FName HorizontalLook = "MouseX";
+	FName HorizontalLook = "MouseX";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Camera")
-		FName HorizontalLookOnController = "TurnRate";
+	FName HorizontalLookOnController = "TurnRate";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Movement")
-		FName MoveForward = "Vertical";
+	FName MoveForward = "Vertical";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Movement")
-		FName MoveSide = "Horizontal";
+	FName MoveSide = "Horizontal";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings")
-		FName Grapple = "Grapple";
+	FName Grapple = "Grapple";
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Interaction")
-		float GrabDistance = 256.0f;
-		float OutlineRange = GrabDistance;
+	float GrabDistance = 256.0f;
+	float OutlineRange = GrabDistance;
 
-		float ObjectRotation = 0.0f;
+	float ObjectRotation = 0.0f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Interaction")
-		float OutlineRadius = 128.0f;
+	float OutlineRadius = 128.0f;
 	
 	UFUNCTION(BlueprintCallable, Category = "Character|Interaction")
-		void FBeginGrab();
+	void FBeginGrab();
 	UFUNCTION(BlueprintCallable, Category="Character|Interaction")
-		void FGrabLocation();
+	void FGrabLocation();
 	UFUNCTION(BlueprintCallable, Category="Character|Interaction")
-		void FStopGrab();
+	void FStopGrab();
 	UFUNCTION(BlueprintCallable, Category="Character|Interaction")
-		void ToggleGrab();
+	void ToggleGrab();
 	UFUNCTION(BlueprintCallable, Category="Character|Interaction")
-		void FRotateObject(float Axis);
+	void FRotateObject(float Axis);
 
 public:	
 	// Called every frame
@@ -102,71 +100,71 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Sensitivity|Mouse")
-		float Sensitivity = 0.25f;
+	float Sensitivity = 0.25f;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Sensitivity|Gamepad")
-		float SensitivityZ = 25.0f;
+	float SensitivityZ = 25.0f;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Sensitivity|Gamepad")
-		float SensitivityY = 45.0f;
+	float SensitivityY = 45.0f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Preferences")
-		bool bToggleUse = true;
+	bool bToggleUse = true;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Preferences|Gameplay")
-		bool bUseSmoothCrouch = true;
+	bool bUseSmoothCrouch = true;
 
 	UFUNCTION(BlueprintPure, Category = "Character|Sensitivity|Mouse")
-		float GetMouseSens() const
-		{
-			UKonsole::PrintToConsole(GetName(), "Warning", FString::Printf(TEXT("Sensitivity: %f"), Sensitivity));
-			return Sensitivity;	
-		}
+	float GetMouseSens() const
+	{
+		UKonsole::PrintToConsole(GetName(), "Warning", FString::Printf(TEXT("Sensitivity: %f"), Sensitivity));
+		return Sensitivity;	
+	}
 	UFUNCTION(BlueprintPure, Category = "Character|Sensitivity|Gamepad")
-		float GetSensZ() const
-		{
-			UKonsole::PrintToConsole(GetName(), "Warning", FString::Printf(TEXT("Z Sensitivity: %f"), SensitivityZ));
-			return SensitivityZ;
-		}
+	float GetSensZ() const
+	{
+		UKonsole::PrintToConsole(GetName(), "Warning", FString::Printf(TEXT("Z Sensitivity: %f"), SensitivityZ));
+		return SensitivityZ;
+	}
 	UFUNCTION(BlueprintPure, Category = "Character|Sensitivity|Gamepad")
-		float GetSensY() const
-		{
-			UKonsole::PrintToConsole(GetName(), "Warning", FString::Printf(TEXT("X Sensitivity: %f"), SensitivityY));
-			return SensitivityY;
-		}
+	float GetSensY() const
+	{
+		UKonsole::PrintToConsole(GetName(), "Warning", FString::Printf(TEXT("X Sensitivity: %f"), SensitivityY));
+		return SensitivityY;
+	}
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Camera")
-		float BaseFoV = 90.0f;
+	float BaseFoV = 90.0f;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Speeds")
-		float BaseWalkSpeed = 250.0f;
+	float BaseWalkSpeed = 250.0f;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Speeds")
-		float BaseWalkSpeedMultiplier = 2.2f;
+	float BaseWalkSpeedMultiplier = 2.2f;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Speeds")
-		float BaseCrouchSpeed = 75.0f;
+	float BaseCrouchSpeed = 75.0f;
 
 	bool IsMoving();
 
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
-		void FVerticalMove(float Value);
+	void FVerticalMove(float Value);
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
-		void FHorizontalMove(float Value);
+	void FHorizontalMove(float Value);
 	UFUNCTION(BlueprintCallable, Category = "Character|Camera")
-		void FVerticalLook(float Axis);
+	void FVerticalLook(float Axis);
 	UFUNCTION(BlueprintCallable, Category = "Character|Camera")
-		void FVerticalLookOnController(float Axis);
+	void FVerticalLookOnController(float Axis);
 	UFUNCTION(BlueprintCallable, Category = "Character|Camera")
-		void FHorizontalLook(float Axis);
+	void FHorizontalLook(float Axis);
 	UFUNCTION(BlueprintCallable, Category = "Character|Camera")
-		void FHorizontalLookOnController(float Axis);
+	void FHorizontalLookOnController(float Axis);
 	
 	UFUNCTION(BlueprintCallable, Category="Character|Movement")
-		void BeginSprint();
+	void BeginSprint();
 	UFUNCTION(BlueprintCallable, Category="Character|Movement")
-		void StopSprint();
+	void StopSprint();
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Preferences")
-		bool bAllowFlash = true;
+	bool bAllowFlash = true;
 	
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Status")
-		bool bIsCrouching = false;
+	bool bIsCrouching = false;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Status")
-		bool bIsFlashOn = false;
+	bool bIsFlashOn = false;
 };
