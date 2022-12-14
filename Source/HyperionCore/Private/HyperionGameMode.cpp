@@ -21,6 +21,19 @@ void AHyperionGameMode::BeginPlay() {
 
 void AHyperionGameMode::ConnectToDiscord(int64 clientID, bool bRequireDiscordToRun) {
 	auto result = discord::Core::Create(clientID, bRequireDiscordToRun ? DiscordCreateFlags_Default : DiscordCreateFlags_NoRequireDiscord, &core);
+	StartDiscordTimer();
+}
+
+void AHyperionGameMode::DisconnectFromDiscord()
+{
+	if(core) {
+		activity.SetState("");
+		activity.SetDetails("");
+		EndDiscordTimer();
+		
+		delete core;
+		core = nullptr;
+	}
 }
 
 void AHyperionGameMode::SetDiscordState(FString State) {
@@ -38,6 +51,12 @@ void AHyperionGameMode::SetDiscordDetails(FString Details) {
 void AHyperionGameMode::StartDiscordTimer() {
 	activity.GetTimestamps().SetStart((FDateTime::UtcNow().ToUnixTimestamp()));
 	activity.GetTimestamps().SetEnd(0);
+	UpdateDiscordActivity();
+}
+
+void AHyperionGameMode::EndDiscordTimer()
+{
+	activity.GetTimestamps().SetEnd((FDateTime::UtcNow().ToUnixTimestamp()));
 	UpdateDiscordActivity();
 }
 

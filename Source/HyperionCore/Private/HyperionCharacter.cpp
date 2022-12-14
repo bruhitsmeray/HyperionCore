@@ -12,6 +12,7 @@ AHyperionCharacter::AHyperionCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanJump = true;
+	GetCharacterMovement()->AirControl = 0.5f;
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	GetCharacterMovement()->MaxWalkSpeedCrouched = BaseCrouchSpeed;
 	GetCapsuleComponent()->SetCapsuleHalfHeight(90.0f);
