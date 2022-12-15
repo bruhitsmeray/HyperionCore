@@ -25,6 +25,8 @@ AHyperionCharacter::AHyperionCharacter()
 	Camera->bUsePawnControlRotation = true;
 	Camera->SetWorldLocation(FVector(0, 0, 70));
 
+	Health = CreateDefaultSubobject<UHyperionHealthComp>(TEXT("Health"));
+
 	FlashSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("FlashSpringArm"));
 	FlashSpringArm->SetupAttachment(Camera);
 	FlashSpringArm->TargetArmLength = 0.0f;

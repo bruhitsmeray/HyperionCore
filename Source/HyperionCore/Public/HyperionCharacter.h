@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HyperionHealthComp.h"
 #include "Konsole.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
@@ -33,6 +34,8 @@ public:
 	UCameraComponent* Camera;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Interaction")
 	UPhysicsHandleComponent* PhysicsHandle;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Vitals")
+	UHyperionHealthComp* Health;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category="Components|Flashlight")
 	USpringArmComponent* FlashSpringArm;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere,Category="Components|HUD")
