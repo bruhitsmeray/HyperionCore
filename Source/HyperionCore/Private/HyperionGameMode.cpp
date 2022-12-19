@@ -12,7 +12,9 @@ AHyperionGameMode::AHyperionGameMode() {
 
 void AHyperionGameMode::Tick(float DeltaSeconds) {
 	Super::Tick(DeltaSeconds);
-	::core->RunCallbacks();
+	if(core) {
+		::core->RunCallbacks();
+	}
 }
 
 void AHyperionGameMode::BeginPlay() {
