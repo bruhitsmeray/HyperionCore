@@ -13,7 +13,7 @@ void USubtitlesHandler::ConfigSubtitlesReferences(UVerticalBox* SubtitlesBox, TS
 	SubtitlesContentReference = SubtitlesContentClass;
 }
 
-void USubtitlesHandler::SubtitlesLogic(USoundWave* AudioFile, FText InSpeaker, FString InDialogue, float InDuration)
+void USubtitlesHandler::SubtitlesLogic(USoundWave* AudioFile, FText InSpeaker, FString InDialogue, FLinearColor InColor, float InDuration)
 {
 	if(!InDialogue.IsEmpty() && IsValid(SubtitlesBoxReference))
 	{
@@ -27,6 +27,7 @@ void USubtitlesHandler::SubtitlesLogic(USoundWave* AudioFile, FText InSpeaker, F
 			SubtitlesContent = CreateWidget<USubtitlesContent>(World, SubtitlesContentReference);
 			SubtitlesContent->SetSpeaker(InSpeaker);
 			SubtitlesContent->SetDialogue(InDialogue);
+			SubtitlesContent->SetLineColor(InColor);
 			SubtitlesContent->SetScreenTime(InDuration);
 			SubtitlesContent->SetRenderTransformAngle(180);
 			SubtitlesBoxReference->AddChildToVerticalBox(SubtitlesContent);
@@ -49,7 +50,7 @@ void USubtitlesHandler::PlayAudio(USoundBase* AudioToPlay)
 	}
 }
 
-void USubtitlesHandler::PlayAudioWithSubtitles(USoundWave* Audio, FText Speaker, FString Dialogue, float Duration, float& ReturnValue)
+void USubtitlesHandler::PlayAudioWithSubtitles(USoundWave* Audio, FText Speaker, FString Dialogue, FLinearColor Color, float Duration, float& ReturnValue)
 {
 	if(IsValid(Audio))
 	{
@@ -63,7 +64,7 @@ void USubtitlesHandler::PlayAudioWithSubtitles(USoundWave* Audio, FText Speaker,
 			Duration = Audio->Duration;
 		}
 	}
-	SubtitlesLogic(Audio, Speaker, Dialogue, Duration);
+	SubtitlesLogic(Audio, Speaker, Dialogue, Color, Duration);
 	ReturnValue = Duration;
 }
 

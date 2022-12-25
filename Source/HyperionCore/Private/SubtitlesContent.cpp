@@ -13,6 +13,11 @@ void USubtitlesContent::SetSpeaker(FText InSpeaker)
 	Speaker = InSpeaker;
 }
 
+void USubtitlesContent::SetLineColor(FLinearColor InLineColor)
+{
+	LineColor = InLineColor;
+}
+
 void USubtitlesContent::SetScreenTime(float InScreenTime)
 {
 	ScreenTime = InScreenTime;

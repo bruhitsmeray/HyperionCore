@@ -27,8 +27,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Subtitles")
 		void ConfigSubtitlesReferences(UVerticalBox* SubtitlesBox, TSubclassOf<USubtitlesContent> SubtitlesContentClass);
 	UFUNCTION(BlueprintCallable, Category="Subtitles")
-		static void SubtitlesLogic(USoundWave* AudioFile, FText InSpeaker, FString InDialogue, float InDuration);
+		static void SubtitlesLogic(USoundWave* AudioFile, FText InSpeaker, FString InDialogue, FLinearColor InColor, float InDuration);
 	UFUNCTION(BlueprintCallable, Category="Subtitles")
-		static void PlayAudioWithSubtitles(USoundWave* Audio, FText Speaker, FString Dialogue, float Duration, float& ReturnValue);
+		static void PlayAudioWithSubtitles(USoundWave* Audio, FText Speaker, FString Dialogue, FLinearColor Color, float Duration, float& ReturnValue);
 		static void PlayAudio(USoundBase* AudioToPlay);
 };
