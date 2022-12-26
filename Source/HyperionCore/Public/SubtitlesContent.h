@@ -30,11 +30,8 @@ public:
 		float BackgroundOpacity = 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Settings|Colors")
 		FLinearColor BackgroundColor = FLinearColor(0, 0, 0, BackgroundOpacity);
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Settings|Colors")
-	    FLinearColor LineColor = FLinearColor(255, 255, 255, 1);
-		
+
 	void SetDialogue(FString InDialogue);
 	void SetSpeaker(FText InSpeaker);
-	void SetLineColor(FLinearColor InLineColor);
 	void SetScreenTime(float InScreenTime);
 };
