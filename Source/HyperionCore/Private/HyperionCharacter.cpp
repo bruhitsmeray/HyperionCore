@@ -27,28 +27,28 @@ AHyperionCharacter::AHyperionCharacter()
 
 	Health = CreateDefaultSubobject<UHyperionHealthComp>(TEXT("Health"));
 
-	FlashSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("FlashSpringArm"));
-	FlashSpringArm->SetupAttachment(Camera);
-	FlashSpringArm->TargetArmLength = 0.0f;
-	FlashSpringArm->bEnableCameraRotationLag = true;
-	FlashSpringArm->CameraRotationLagSpeed = 12.0f;
+	MainSpring = CreateDefaultSubobject<USpringArmComponent>(TEXT("MainSpring"));
+	MainSpring->SetupAttachment(Camera);
+	MainSpring->TargetArmLength = 0.0f;
+	MainSpring->bEnableCameraRotationLag = true;
+	MainSpring->CameraRotationLagSpeed = 12.0f;
 
-	HUDSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("HUDSpringArm"));
-	HUDSpringArm->SetupAttachment(Camera);
-	HUDSpringArm->TargetArmLength = 0.0f;
-	HUDSpringArm->bEnableCameraLag = true;
-	HUDSpringArm->CameraLagSpeed = 20.0f;
-	HUDSpringArm->CameraLagMaxDistance = 1.0f;
+	InterfaceSpring = CreateDefaultSubobject<USpringArmComponent>(TEXT("InterfaceSpring"));
+	InterfaceSpring->SetupAttachment(Camera);
+	InterfaceSpring->TargetArmLength = 0.0f;
+	InterfaceSpring->bEnableCameraLag = true;
+	InterfaceSpring->CameraLagSpeed = 20.0f;
+	InterfaceSpring->CameraLagMaxDistance = 1.0f;
 
 	InnerLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("InnerLight"));
-	InnerLight->SetupAttachment(FlashSpringArm);
+	InnerLight->SetupAttachment(MainSpring);
 	InnerLight->AttenuationRadius = 2500.0f;
 	InnerLight->InnerConeAngle = 16.0f;
 	InnerLight->OuterConeAngle = 24.0f;
 	InnerLight->SetVisibility(false);
 
 	OuterLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("OuterLight"));
-	OuterLight->SetupAttachment(FlashSpringArm);
+	OuterLight->SetupAttachment(MainSpring);
 	OuterLight->Intensity = 2500.0f;
 	OuterLight->AttenuationRadius = 2500.0f;
 	OuterLight->InnerConeAngle = 32.0f;
@@ -56,7 +56,7 @@ AHyperionCharacter::AHyperionCharacter()
 	OuterLight->SetVisibility(false);
 
 	HUDWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HUDWidget"));
-	HUDWidget->SetupAttachment(HUDSpringArm);
+	HUDWidget->SetupAttachment(InterfaceSpring);
 	HUDWidget->SetRelativeLocation(FVector(120, 0, 0));
 	HUDWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	

@@ -37,9 +37,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Vitals")
 	UHyperionHealthComp* Health;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category="Components|Flashlight")
-	USpringArmComponent* FlashSpringArm;
+	USpringArmComponent* MainSpring;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere,Category="Components|HUD")
-	USpringArmComponent* HUDSpringArm;
+	USpringArmComponent* InterfaceSpring;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Flashlight")
 	USpotLightComponent* InnerLight;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Flashlight")
@@ -52,7 +52,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	bool bIsHolding = false;
 
 	UFUNCTION(BlueprintCallable, Category="Character|Interface")
 	void SetDrawSizeByScreenResolution(FVector2D Resolution);
@@ -69,9 +68,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Camera")
 	FName HorizontalLookOnController = "TurnRate";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Movement")
-	FName MoveForward = "Vertical";
+	FName MoveForward = "MoveForward";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Movement")
-	FName MoveSide = "Horizontal";
+	FName MoveSide = "MoveRight";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings")
 	FName Grapple = "Grapple";
 
@@ -83,6 +82,9 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Interaction")
 	float OutlineRadius = 128.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Guns")
+	FVector GunOffset = FVector(100, 0, -10);
 	
 	UFUNCTION(BlueprintCallable, Category = "Character|Interaction")
 	void FBeginGrab();
@@ -142,8 +144,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Speeds")
 	float BaseCrouchSpeed = 75.0f;
 
-	bool IsMoving();
-
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
 	void FVerticalMove(float Value);
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
@@ -166,8 +166,11 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Preferences")
 	bool bAllowFlash = true;
 	
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Status")
+	UPROPERTY(BlueprintReadWrite, VisibleInstanceOnly, Category = "Status")
 	bool bIsCrouching = false;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Status")
+	UPROPERTY(BlueprintReadWrite, VisibleInstanceOnly, Category = "Status")
 	bool bIsFlashOn = false;
+	UPROPERTY(BlueprintReadWrite, VisibleInstanceOnly, Category = "Status")
+	bool bIsHolding = false;
+	bool IsMoving();
 };
