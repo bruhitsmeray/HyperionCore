@@ -26,19 +26,13 @@ AHyperionCharacter::AHyperionCharacter()
 	Camera->SetWorldLocation(FVector(0, 0, 70));
 
 	Health = CreateDefaultSubobject<UHyperionHealthComp>(TEXT("Health"));
+	Health->SetIsReplicated(true);
 
 	MainSpring = CreateDefaultSubobject<USpringArmComponent>(TEXT("MainSpring"));
 	MainSpring->SetupAttachment(Camera);
 	MainSpring->TargetArmLength = 0.0f;
 	MainSpring->bEnableCameraRotationLag = true;
 	MainSpring->CameraRotationLagSpeed = 12.0f;
-
-	InterfaceSpring = CreateDefaultSubobject<USpringArmComponent>(TEXT("InterfaceSpring"));
-	InterfaceSpring->SetupAttachment(Camera);
-	InterfaceSpring->TargetArmLength = 0.0f;
-	InterfaceSpring->bEnableCameraLag = true;
-	InterfaceSpring->CameraLagSpeed = 20.0f;
-	InterfaceSpring->CameraLagMaxDistance = 1.0f;
 
 	InnerLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("InnerLight"));
 	InnerLight->SetupAttachment(MainSpring);
@@ -54,13 +48,7 @@ AHyperionCharacter::AHyperionCharacter()
 	OuterLight->InnerConeAngle = 32.0f;
 	OuterLight->OuterConeAngle = 48.0f;
 	OuterLight->SetVisibility(false);
-
-	HUDWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HUDWidget"));
-	HUDWidget->SetupAttachment(InterfaceSpring);
-	HUDWidget->SetRelativeLocation(FVector(120, 0, 0));
-	HUDWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	
-
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
 }
 
@@ -69,11 +57,6 @@ void AHyperionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-void AHyperionCharacter::SetDrawSizeByScreenResolution(FVector2D Resolution)
-{
-	HUDWidget->SetDrawSize(Resolution);
 }
 
 void AHyperionCharacter::FBeginGrab()
@@ -222,6 +205,16 @@ void AHyperionCharacter::StopSprint()
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 }
 
+void AHyperionCharacter::BeginSprintOnServer_Implementation()
+{
+	BeginSprint();
+}
+
+void AHyperionCharacter::StopSprintOnServer_Implementation()
+{
+	StopSprint();
+}
+
 // Called every frame
 void AHyperionCharacter::Tick(float DeltaTime)
 {
@@ -244,9 +237,6 @@ void AHyperionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		&AHyperionCharacter::FHorizontalLookOnController);
 
 	PlayerInputComponent->BindAxis("RotateInteraction", this, &AHyperionCharacter::FRotateObject);
-
-	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AHyperionCharacter::BeginSprint);
-	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AHyperionCharacter::StopSprint);
 	
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHyperionCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AHyperionCharacter::StopJumping);

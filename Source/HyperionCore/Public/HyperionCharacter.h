@@ -38,23 +38,16 @@ public:
 	UHyperionHealthComp* Health;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category="Components|Flashlight")
 	USpringArmComponent* MainSpring;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere,Category="Components|HUD")
-	USpringArmComponent* InterfaceSpring;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Flashlight")
 	USpotLightComponent* InnerLight;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Flashlight")
 	USpotLightComponent* OuterLight;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|Interaction")
 	UPrimitiveComponent* HitComponent;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components|HUD")
-	UWidgetComponent* HUDWidget;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UFUNCTION(BlueprintCallable, Category="Character|Interface")
-	void SetDrawSizeByScreenResolution(FVector2D Resolution);
 	
 	bool IsWalkingV;
 	bool IsWalkingH;
@@ -156,11 +149,16 @@ public:
 	void FHorizontalLook(float Axis);
 	UFUNCTION(BlueprintCallable, Category = "Character|Camera")
 	void FHorizontalLookOnController(float Axis);
-	
+
 	UFUNCTION(BlueprintCallable, Category="Character|Movement")
 	void BeginSprint();
 	UFUNCTION(BlueprintCallable, Category="Character|Movement")
 	void StopSprint();
+	
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category="Character|Movement")
+	void BeginSprintOnServer();
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category="Character|Movement")
+	void StopSprintOnServer();
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Preferences")
