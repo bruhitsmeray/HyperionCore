@@ -25,9 +25,6 @@ AHyperionCharacter::AHyperionCharacter()
 	Camera->bUsePawnControlRotation = true;
 	Camera->SetWorldLocation(FVector(0, 0, 70));
 
-	Health = CreateDefaultSubobject<UHyperionHealthComp>(TEXT("Health"));
-	Health->SetIsReplicated(true);
-
 	MainSpring = CreateDefaultSubobject<USpringArmComponent>(TEXT("MainSpring"));
 	MainSpring->SetupAttachment(Camera);
 	MainSpring->TargetArmLength = 0.0f;
@@ -56,7 +53,14 @@ AHyperionCharacter::AHyperionCharacter()
 void AHyperionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if(bUseBuiltInHealthSystem)
+	{
+		Health = CreateDefaultSubobject<UHyperionHealthComp>(TEXT("Health"));
+		Health->SetIsReplicated(true);
+	} else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("The built-in Health system is disabled. Unless a custom Health system is used, please enable the built-in Health system."));
+	}
 }
 
 void AHyperionCharacter::FBeginGrab()

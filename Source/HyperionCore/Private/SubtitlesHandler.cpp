@@ -6,6 +6,14 @@
 UVerticalBox* SubtitlesBoxReference = nullptr;
 TSubclassOf<USubtitlesContent> SubtitlesContentReference;
 USubtitlesContent* SubtitlesContent;
+int ArrayLimitReference;
+
+
+void USubtitlesHandler::NativeConstruct()
+{
+	Super::NativeConstruct();
+	ArrayLimitReference = ArrayLimit;
+}
 
 void USubtitlesHandler::ConfigSubtitlesReferences(UVerticalBox* SubtitlesBox, TSubclassOf<USubtitlesContent> SubtitlesContentClass)
 {
@@ -13,12 +21,12 @@ void USubtitlesHandler::ConfigSubtitlesReferences(UVerticalBox* SubtitlesBox, TS
 	SubtitlesContentReference = SubtitlesContentClass;
 }
 
-void USubtitlesHandler::SubtitlesLogic(USoundWave* AudioFile, FText InSpeaker, FString InDialogue, float InDuration)
+void USubtitlesHandler::SubtitlesLogic(const UObject* WorldContextObject, USoundWave* AudioFile, FText InSpeaker, FString InDialogue, float InDuration)
 {
 	if(!InDialogue.IsEmpty() && IsValid(SubtitlesBoxReference))
 	{
-		UWorld* World = GEngine->GameViewport->GetWorld();
-		if(SubtitlesBoxReference->GetChildrenCount() >= 3 && IsValid(SubtitlesBoxReference->GetChildAt(0)))
+		UWorld* World = GEngine->GetWorldFromContextObjectChecked(WorldContextObject);
+		if(SubtitlesBoxReference->GetChildrenCount() >= ArrayLimitReference && IsValid(SubtitlesBoxReference->GetChildAt(0)))
 		{
 			SubtitlesBoxReference->GetChildAt(0)->RemoveFromParent();
 		}
@@ -39,17 +47,9 @@ void USubtitlesHandler::SubtitlesLogic(USoundWave* AudioFile, FText InSpeaker, F
 	}
 }
 
-void USubtitlesHandler::PlayAudio(USoundBase* AudioToPlay)
-{
-	if(AudioToPlay)
-	{
-		FSlateSound NewAudio;
-		NewAudio.SetResourceObject(AudioToPlay);
-		FSlateApplication::Get().PlaySound(NewAudio);
-	}
-}
 
-void USubtitlesHandler::PlayAudioWithSubtitles(USoundWave* Audio, FText Speaker, FString Dialogue, float Duration, float& ReturnValue)
+
+void USubtitlesHandler::PlayAudioWithSubtitles(const UObject* WorldContextObject, USoundWave* Audio, FText Speaker, FString Dialogue, float Duration, float& ReturnValue)
 {
 	if(IsValid(Audio))
 	{
@@ -63,7 +63,16 @@ void USubtitlesHandler::PlayAudioWithSubtitles(USoundWave* Audio, FText Speaker,
 			Duration = Audio->Duration;
 		}
 	}
-	SubtitlesLogic(Audio, Speaker, Dialogue, Duration);
+	SubtitlesLogic(WorldContextObject, Audio, Speaker, Dialogue, Duration);
 	ReturnValue = Duration;
 }
 
+void USubtitlesHandler::PlayAudio(USoundBase* AudioToPlay)
+{
+	if(AudioToPlay)
+	{
+		FSlateSound NewAudio;
+		NewAudio.SetResourceObject(AudioToPlay);
+		FSlateApplication::Get().PlaySound(NewAudio);
+	}
+}

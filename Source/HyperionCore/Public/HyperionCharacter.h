@@ -23,6 +23,8 @@ public:
 	AHyperionCharacter();
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Preferences")
 	bool EnableLoggingThroughKonsolePlugin = false;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Preferences")
+	bool bUseBuiltInHealthSystem = true;
 	
 	void Log(FString Code, FString Message) {
 		if(EnableLoggingThroughKonsolePlugin) {

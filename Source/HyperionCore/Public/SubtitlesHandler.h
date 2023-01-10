@@ -15,7 +15,7 @@ UCLASS()
 class HYPERIONCORE_API USubtitlesHandler : public UUserWidget
 {
 	GENERATED_BODY()
-
+	virtual void NativeConstruct() override;
 public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Settings")
 		int ArrayLimit = 3;
@@ -26,9 +26,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Subtitles")
 		void ConfigSubtitlesReferences(UVerticalBox* SubtitlesBox, TSubclassOf<USubtitlesContent> SubtitlesContentClass);
-	UFUNCTION(BlueprintCallable, Category="Subtitles")
-		static void SubtitlesLogic(USoundWave* AudioFile, FText InSpeaker, FString InDialogue, float InDuration);
-	UFUNCTION(BlueprintCallable, Category="Subtitles")
-		static void PlayAudioWithSubtitles(USoundWave* Audio, FText Speaker, FString Dialogue, float Duration, float& ReturnValue);
+	UFUNCTION(BlueprintCallable, Category="Subtitles", meta=(WorldContext="WorldContextObject"))
+		static void SubtitlesLogic(const UObject* WorldContextObject, USoundWave* AudioFile, FText InSpeaker, FString InDialogue, float InDuration);
+	UFUNCTION(BlueprintCallable, Category="Subtitles", meta=(WorldContext="WorldContextObject"))
+		static void PlayAudioWithSubtitles(const UObject* WorldContextObject, USoundWave* Audio, FText Speaker, FString Dialogue, float Duration, float& ReturnValue);
 		static void PlayAudio(USoundBase* AudioToPlay);
 };
