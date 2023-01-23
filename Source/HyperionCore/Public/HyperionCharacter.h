@@ -132,12 +132,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Camera")
 	float BaseFoV = 90.0f;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Speeds")
-	float BaseWalkSpeed = 250.0f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Character|Speeds")
+	float BaseWalkSpeed = 256.0f;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Speeds")
 	float BaseWalkSpeedMultiplier = 2.2f;
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Speeds")
-	float BaseCrouchSpeed = 75.0f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Character|Speeds")
+	float BaseCrouchSpeed = 128.0f;
 
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
 	void FVerticalMove(float Value);

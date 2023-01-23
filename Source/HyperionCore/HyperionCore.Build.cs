@@ -22,6 +22,9 @@ public class HyperionCore : ModuleRules
 			new string[] {
 				"Core",
 				"HyperionUI",
+				"OnlineSubsystem",
+				"OnlineSubsystemEOS",
+				"OnlineSubsystemEOSPlus",
 				"KonsolePlugin",
 				"UMG"
 				// ... add other public dependencies that you statically link with here ...
@@ -42,7 +45,7 @@ public class HyperionCore : ModuleRules
 		
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[] {
-				// ... add any modules that your module loads dynamically here ...
+				"OnlineSubsystemSteam"
 			}
 		);
 	}

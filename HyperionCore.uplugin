@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.3.2",
+	"VersionName": "1.4.0",
 	"FriendlyName": "HyperionCore",
 	"Description": "",
 	"Category": "Miscellaneous",
@@ -30,6 +30,18 @@
 			"Name": "KonsolePlugin",
 			"Enabled": true,
 			"Optional": true
+		},
+		{
+			"Name": "OnlineSubsystem",
+			"Enabled": true
+		},
+		{
+			"Name": "OnlineSubsystemEOS",
+			"Enabled": true
+		},
+		{
+			"Name": "OnlineSubsystemSteam",
+			"Enabled": true
 		}
 	]
 }
