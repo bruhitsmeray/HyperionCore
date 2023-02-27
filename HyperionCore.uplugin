@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.4.0",
+	"VersionName": "1.4.1",
 	"FriendlyName": "HyperionCore",
 	"Description": "",
 	"Category": "Miscellaneous",
@@ -25,11 +25,6 @@
 		{
 			"Name": "HyperionUI",
 			"Enabled": true
-		},
-		{
-			"Name": "KonsolePlugin",
-			"Enabled": true,
-			"Optional": true
 		},
 		{
 			"Name": "OnlineSubsystem",

@@ -57,8 +57,7 @@ void UHyperionInstance::Login()
 			}
 		}
 	} else {
-		UKonsole::PrintToConsole(Self, "Warning",
-			"You can't login while the GameType is set to: Singleplayer.");
+		UE_LOG(LogTemp, Warning, TEXT("You can't login while the GameType is set to: Singleplayer."));
 	}
 }
 
@@ -67,14 +66,12 @@ void UHyperionInstance::OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful,
 {
 	bIsLoggedIn = bWasSuccessful;
 	if(OnlineSubsystem){
-		UKonsole::PrintToConsole(Self, "Warning",
-			FString::Printf(TEXT("Client successfully logged in. Code: %d"), bWasSuccessful));
+		UE_LOG(LogTemp, Warning, TEXT("Client successfully logged in. Code: %d"), bWasSuccessful)
 		if(IOnlineIdentityPtr Identity = OnlineSubsystem->GetIdentityInterface()) {
 			OnlinePlatformUserName = Identity->GetUserAccount(UserId)->GetDisplayName();
 			Identity->ClearOnLoginCompleteDelegates(0, this);
 		}
 	} else {
-		UKonsole::PrintToConsole(Self, "Warning",
-			FString::Printf(TEXT("Client failed to log in. Code: %d"), bWasSuccessful));
+		UE_LOG(LogTemp, Warning, TEXT("Client failed to log in. Code: %d"), bWasSuccessful);
 	}
 }
