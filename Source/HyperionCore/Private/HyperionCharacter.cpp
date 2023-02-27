@@ -2,8 +2,14 @@
 
 
 #include "HyperionCharacter.h"
+#include "HyperionInstance.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+
+#include "discord.h"
+
+discord::Core* core{};
+discord::Activity activity{};
 
 // Sets default values
 AHyperionCharacter::AHyperionCharacter()
@@ -82,7 +88,7 @@ void AHyperionCharacter::FBeginGrab()
 
 		if(bHit)
 		{
-			Log("Warning", "The line trace hit an object.");
+			UE_LOG(LogTemp, Warning, TEXT("The line trace hit an object."))
 			if(IsValid(HitResult.GetComponent()) && HitResult.GetComponent()->IsSimulatingPhysics())
 			{
 				HitComponent = HitResult.GetComponent();
@@ -91,14 +97,14 @@ void AHyperionCharacter::FBeginGrab()
 				bIsHolding = true;
 			} else {
 				bIsHolding = false;
-				Log("Warning", "The component that was hit is not available or does not simulate physics.");
+				UE_LOG(LogTemp, Warning, TEXT("The component that was hit is not available or does not simulate physics."));
 			}
 		} else {
 			bIsHolding = false;
-			Log("Warning", "No hit registered.");
+			UE_LOG(LogTemp, Warning, TEXT("No hit registered."));
 		}
 	} else {
-		Log("Warning", "World is not available.");
+		UE_LOG(LogTemp, Warning, TEXT("World is not available."));
 	}
 }
 
@@ -151,6 +157,58 @@ bool AHyperionCharacter::IsMoving()
 		return true;
 	}
 	return false;
+}
+
+void AHyperionCharacter::ConnectToDiscord(const int64 clientID, const bool bRequireDiscordToRun)
+{
+	auto result = discord::Core::Create(clientID, bRequireDiscordToRun ? DiscordCreateFlags_Default : DiscordCreateFlags_NoRequireDiscord, &core);
+	StartDiscordTimer();
+}
+
+void AHyperionCharacter::DisconnectFromDiscord()
+{
+	if(core) {
+		activity.SetState("");
+		activity.SetDetails("");
+		EndDiscordTimer();
+		
+		delete core;
+		core = nullptr;
+	}
+}
+
+void AHyperionCharacter::SetDiscordState(FString State)
+{
+	const char* state = TCHAR_TO_UTF8(*State);
+	activity.SetState(state);
+	UpdateDiscordActivity();
+}
+
+void AHyperionCharacter::SetDiscordDetails(FString Details)
+{
+	const char* details = TCHAR_TO_UTF8(*Details);
+	activity.SetDetails(details);
+	UpdateDiscordActivity();
+}
+
+void AHyperionCharacter::StartDiscordTimer()
+{
+	activity.GetTimestamps().SetStart((FDateTime::UtcNow().ToUnixTimestamp()));
+	activity.GetTimestamps().SetEnd(0);
+	UpdateDiscordActivity();
+}
+
+void AHyperionCharacter::EndDiscordTimer()
+{
+	activity.GetTimestamps().SetEnd((FDateTime::UtcNow().ToUnixTimestamp()));
+	UpdateDiscordActivity();
+}
+
+void AHyperionCharacter::UpdateDiscordActivity()
+{
+	if(core) {
+		core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {});
+	}
 }
 
 void AHyperionCharacter::FVerticalMove(float Value)
@@ -223,7 +281,9 @@ void AHyperionCharacter::StopSprintOnServer_Implementation()
 void AHyperionCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if(core) {
+		::core->RunCallbacks();
+	}
 }
 
 // Called to bind functionality to input

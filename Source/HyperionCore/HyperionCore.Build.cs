@@ -25,7 +25,6 @@ public class HyperionCore : ModuleRules
 				"OnlineSubsystem",
 				"OnlineSubsystemEOS",
 				"OnlineSubsystemEOSPlus",
-				"KonsolePlugin",
 				"UMG"
 				// ... add other public dependencies that you statically link with here ...
 			}

@@ -2,8 +2,6 @@
 
 
 #include "HyperionInstance.h"
-#include "Konsole.h"
-
 #include "OnlineSubsystem.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 

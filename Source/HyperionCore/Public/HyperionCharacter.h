@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "HyperionHealthComp.h"
-#include "Konsole.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SpotLightComponent.h"
@@ -25,12 +24,6 @@ public:
 	bool EnableLoggingThroughKonsolePlugin = false;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Preferences")
 	bool bUseBuiltInHealthSystem = true;
-	
-	void Log(FString Code, FString Message) {
-		if(EnableLoggingThroughKonsolePlugin) {
-			UKonsole::PrintToConsole(GetName(), Code, Message);
-		}
-	};
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Components")
 	UCameraComponent* Camera;
@@ -114,19 +107,16 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Character|Sensitivity|Mouse")
 	float GetMouseSens() const
 	{
-		UKonsole::PrintToConsole(GetName(), "Warning", FString::Printf(TEXT("Sensitivity: %f"), Sensitivity));
 		return Sensitivity;	
 	}
 	UFUNCTION(BlueprintPure, Category = "Character|Sensitivity|Gamepad")
 	float GetSensZ() const
 	{
-		UKonsole::PrintToConsole(GetName(), "Warning", FString::Printf(TEXT("Z Sensitivity: %f"), SensitivityZ));
 		return SensitivityZ;
 	}
 	UFUNCTION(BlueprintPure, Category = "Character|Sensitivity|Gamepad")
 	float GetSensY() const
 	{
-		UKonsole::PrintToConsole(GetName(), "Warning", FString::Printf(TEXT("X Sensitivity: %f"), SensitivityY));
 		return SensitivityY;
 	}
 
@@ -173,4 +163,21 @@ protected:
 	UPROPERTY(BlueprintReadWrite, VisibleInstanceOnly, Category = "Status")
 	bool bIsHolding = false;
 	bool IsMoving();
+
+protected:
+	UFUNCTION(BlueprintCallable, Category="Discord")
+	static void ConnectToDiscord(const int64 clientID, const bool bRequireDiscordToRun);
+	UFUNCTION(BlueprintCallable, Category="Discord")
+	static void DisconnectFromDiscord();
+
+	UFUNCTION(BlueprintCallable, Category="Discord")
+	static void SetDiscordState(FString State);
+	UFUNCTION(BlueprintCallable, Category="Discord")
+	static void SetDiscordDetails(FString Details);
+	UFUNCTION(BlueprintCallable, Category="Discord")
+	static void StartDiscordTimer();
+	UFUNCTION(BlueprintCallable, Category="Discord")
+	static void EndDiscordTimer();
+	UFUNCTION(BlueprintCallable, Category="Discord")
+	static void UpdateDiscordActivity();
 };

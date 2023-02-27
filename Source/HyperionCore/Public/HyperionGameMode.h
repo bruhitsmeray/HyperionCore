@@ -20,19 +20,4 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void ConnectToDiscord(const int64 clientID, const bool bRequireDiscordToRun);
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void DisconnectFromDiscord();
-
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void SetDiscordState(FString State);
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void SetDiscordDetails(FString Details);
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void StartDiscordTimer();
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void EndDiscordTimer();
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void UpdateDiscordActivity();
 };
