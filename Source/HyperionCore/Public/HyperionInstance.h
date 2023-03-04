@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Engine/GameInstance.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "HyperionInstance.generated.h"
 
 /**
@@ -43,4 +44,18 @@ public:
 	UFUNCTION(Exec, BlueprintCallable, Category="Online|Login")
 		void Login();
 		void OnLoginComplete(int32 LocalUserNum, bool bWasSuccessful, const FUniqueNetId& UserId, const FString& Error);
+
+	UFUNCTION(Exec, BlueprintCallable, Category="Online|Sessions")
+		void CreateEOSSession(bool bIsDedicatedServer, bool bIsLanServer, int32 NumberOfPlayers);
+		void OnCreateEOSSessionComplete(FName SessionName, bool bWasSuccesful);
+
+	UFUNCTION(Exec, BlueprintCallable, Category="Online|Sessions")
+		void FindAndJoinSession();
+		void OnFindAndJoinSessionComplete(bool bWasSuccesful);
+
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+
+	UFUNCTION(Exec, BlueprintCallable, Category="Online|Sessions")
+		void JoinEOSSession();
+		void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 };
