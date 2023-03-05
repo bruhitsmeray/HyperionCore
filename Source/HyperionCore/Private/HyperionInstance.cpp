@@ -45,7 +45,7 @@ void UHyperionInstance::Login()
 			if (IOnlineIdentityPtr Identity = OnlineSubsystem->GetIdentityInterface()) {
 				FOnlineAccountCredentials Credentials;
 				Credentials.Id = FString("localhost:6300");
-				Credentials.Token = FString("Context_1");
+				Credentials.Token = FString("C1");
 				Credentials.Type = FString("developer");
 
 				Identity->OnLoginCompleteDelegates->AddUObject(this, &UHyperionInstance::OnLoginComplete);
