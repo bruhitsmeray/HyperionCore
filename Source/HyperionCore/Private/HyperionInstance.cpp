@@ -20,8 +20,10 @@ UHyperionInstance::UHyperionInstance()
 void UHyperionInstance::Init()
 {
 	Super::Init();
-	OnlineSubsystem = IOnlineSubsystem::Get();
-	Login();
+	if(GameType == "Online") {
+		OnlineSubsystem = IOnlineSubsystem::Get();
+		Login();
+	}
 }
 
 void UHyperionInstance::Shutdown()
