@@ -6,15 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-#include "discord.h"
-
-discord::Core* core{};
-discord::Activity activity{};
-
-// Sets default values
-AHyperionCharacter::AHyperionCharacter()
-{
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+AHyperionCharacter::AHyperionCharacter(){
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanJump = true;
@@ -56,24 +48,19 @@ AHyperionCharacter::AHyperionCharacter()
 }
 
 // Called when the game starts or when spawned
-void AHyperionCharacter::BeginPlay()
-{
+void AHyperionCharacter::BeginPlay(){
 	Super::BeginPlay();
-	if(bUseBuiltInHealthSystem)
-	{
+	if(bUseBuiltInHealthSystem) {
 		Health = CreateDefaultSubobject<UHyperionHealthComp>(TEXT("Health"));
 		Health->SetIsReplicated(true);
-	} else
-	{
+	} else {
 		UE_LOG(LogTemp, Warning, TEXT("The built-in Health system is disabled. Unless a custom Health system is used, please enable the built-in Health system."));
 	}
 }
 
-void AHyperionCharacter::FBeginGrab()
-{
+void AHyperionCharacter::FBeginGrab(){
 	UWorld* World = GetWorld();
-	if(IsValid(World))
-	{
+	if(IsValid(World)) {
 		FVector CamLoc;
 		FRotator CamRot;
 		FHitResult HitResult;
@@ -86,11 +73,9 @@ void AHyperionCharacter::FBeginGrab()
 		FCollisionQueryParams TraceParams;
 		bool bHit = World->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, TraceParams);
 
-		if(bHit)
-		{
+		if(bHit) {
 			UE_LOG(LogTemp, Warning, TEXT("The line trace hit an object."))
-			if(IsValid(HitResult.GetComponent()) && HitResult.GetComponent()->IsSimulatingPhysics())
-			{
+			if(IsValid(HitResult.GetComponent()) && HitResult.GetComponent()->IsSimulatingPhysics()) {
 				HitComponent = HitResult.GetComponent();
 				PhysicsHandle->GrabComponentAtLocation(HitComponent, "None", HitComponent->GetComponentLocation());
 				HitComponent->SetAngularDamping(PhysicsHandle->AngularDamping);
@@ -108,39 +93,31 @@ void AHyperionCharacter::FBeginGrab()
 	}
 }
 
-void AHyperionCharacter::FGrabLocation()
-{
+void AHyperionCharacter::FGrabLocation(){
 	PhysicsHandle->SetTargetLocation(Camera->GetComponentLocation() + (Camera->GetForwardVector() * GrabDistance));
-	if(bIsHolding && IsValid(HitComponent))
-	{
+	if(bIsHolding && IsValid(HitComponent)) {
 		HitComponent->SetRelativeRotation(FRotator(0, ObjectRotation, 0), false, nullptr);
 	}
 }
 
-void AHyperionCharacter::FStopGrab()
-{
-	if(IsValid(HitComponent))
-	{
+void AHyperionCharacter::FStopGrab(){
+	if(IsValid(HitComponent)) {
 		HitComponent->SetAngularDamping(0.0f);
 		PhysicsHandle->ReleaseComponent();
 		bIsHolding = false;
 	}
 }
 
-void AHyperionCharacter::ToggleGrab()
-{
-	if(bIsHolding)
-	{
+void AHyperionCharacter::ToggleGrab(){
+	if(bIsHolding) {
 		FStopGrab();
 	} else {
 		FBeginGrab();
 	}
 }
 
-void AHyperionCharacter::FRotateObject(float Axis)
-{
-	if(bIsHolding)
-	{
+void AHyperionCharacter::FRotateObject(float Axis){
+	if(bIsHolding) {
 		FRotator SelfRotation = HitComponent->GetRelativeRotation();
 		if(Axis < 0.0f) {
 			ObjectRotation = SelfRotation.Yaw - 10.0f;
@@ -150,8 +127,7 @@ void AHyperionCharacter::FRotateObject(float Axis)
 	}
 }
 
-bool AHyperionCharacter::IsMoving()
-{
+bool AHyperionCharacter::IsMoving() {
 	if((InputComponent->GetAxisValue(MoveForward) > 0 || InputComponent->GetAxisValue(MoveForward) < 0)
 		|| (InputComponent->GetAxisValue(MoveSide) > 0 || InputComponent->GetAxisValue(MoveSide) < 0)) {
 		return true;
@@ -159,62 +135,8 @@ bool AHyperionCharacter::IsMoving()
 	return false;
 }
 
-void AHyperionCharacter::ConnectToDiscord(const int64 clientID, const bool bRequireDiscordToRun)
-{
-	auto result = discord::Core::Create(clientID, bRequireDiscordToRun ? DiscordCreateFlags_Default : DiscordCreateFlags_NoRequireDiscord, &core);
-	StartDiscordTimer();
-}
-
-void AHyperionCharacter::DisconnectFromDiscord()
-{
-	if(core) {
-		activity.SetState("");
-		activity.SetDetails("");
-		EndDiscordTimer();
-		
-		delete core;
-		core = nullptr;
-	}
-}
-
-void AHyperionCharacter::SetDiscordState(FString State)
-{
-	const char* state = TCHAR_TO_UTF8(*State);
-	activity.SetState(state);
-	UpdateDiscordActivity();
-}
-
-void AHyperionCharacter::SetDiscordDetails(FString Details)
-{
-	const char* details = TCHAR_TO_UTF8(*Details);
-	activity.SetDetails(details);
-	UpdateDiscordActivity();
-}
-
-void AHyperionCharacter::StartDiscordTimer()
-{
-	activity.GetTimestamps().SetStart((FDateTime::UtcNow().ToUnixTimestamp()));
-	activity.GetTimestamps().SetEnd(0);
-	UpdateDiscordActivity();
-}
-
-void AHyperionCharacter::EndDiscordTimer()
-{
-	activity.GetTimestamps().SetEnd((FDateTime::UtcNow().ToUnixTimestamp()));
-	UpdateDiscordActivity();
-}
-
-void AHyperionCharacter::UpdateDiscordActivity()
-{
-	if(core) {
-		core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {});
-	}
-}
-
-void AHyperionCharacter::FVerticalMove(float Value)
-{
-	if(Value != 0.0f)
-	{
+void AHyperionCharacter::FVerticalMove(float Value){
+	if(Value != 0.0f) {
 		AddMovementInput(GetActorForwardVector(), Value);
 		IsWalkingV = true;
 	} else {
@@ -222,10 +144,8 @@ void AHyperionCharacter::FVerticalMove(float Value)
 	}
 }
 
-void AHyperionCharacter::FHorizontalMove(float Value)
-{
-	if(Value != 0.0f)
-	{
+void AHyperionCharacter::FHorizontalMove(float Value){
+	if(Value != 0.0f) {
 		AddMovementInput(GetActorRightVector(), Value);
 		IsWalkingH = true;
 	} else {
@@ -233,64 +153,48 @@ void AHyperionCharacter::FHorizontalMove(float Value)
 	}
 }
 
-void AHyperionCharacter::FVerticalLook(float Axis)
-{
+void AHyperionCharacter::FVerticalLook(float Axis){
 	AddControllerPitchInput(Axis * Sensitivity);
 	FGrabLocation();
 }
 
-void AHyperionCharacter::FVerticalLookOnController(float Axis)
-{
+void AHyperionCharacter::FVerticalLookOnController(float Axis){
 	AddControllerPitchInput(Axis * SensitivityY * GetWorld()->GetDeltaSeconds());
 	FGrabLocation();
 }
 
-void AHyperionCharacter::FHorizontalLook(float Axis)
-{
+void AHyperionCharacter::FHorizontalLook(float Axis){
 	AddControllerYawInput(Axis * Sensitivity);
 	FGrabLocation();
 }
 
-void AHyperionCharacter::FHorizontalLookOnController(float Axis)
-{
+void AHyperionCharacter::FHorizontalLookOnController(float Axis){
 	AddControllerYawInput(Axis * SensitivityZ * GetWorld()->GetDeltaSeconds());
 	FGrabLocation();
 }
 
-void AHyperionCharacter::BeginSprint()
-{
+void AHyperionCharacter::BeginSprint(){
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed * BaseWalkSpeedMultiplier;
 }
 
-void AHyperionCharacter::StopSprint()
-{
+void AHyperionCharacter::StopSprint(){
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 }
 
-void AHyperionCharacter::BeginSprintOnServer_Implementation()
-{
+void AHyperionCharacter::BeginSprintOnServer_Implementation(){
 	BeginSprint();
 }
 
-void AHyperionCharacter::StopSprintOnServer_Implementation()
-{
+void AHyperionCharacter::StopSprintOnServer_Implementation(){
 	StopSprint();
 }
 
-// Called every frame
-void AHyperionCharacter::Tick(float DeltaTime)
-{
+void AHyperionCharacter::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
-	if(core) {
-		::core->RunCallbacks();
-	}
 }
 
-// Called to bind functionality to input
-void AHyperionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
+void AHyperionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent){
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 	PlayerInputComponent->BindAxis(MoveForward, this, &AHyperionCharacter::FVerticalMove);
 	PlayerInputComponent->BindAxis(MoveSide, this, &AHyperionCharacter::FHorizontalMove);
 	PlayerInputComponent->BindAxis(VerticalLook, this, &AHyperionCharacter::FVerticalLook);
@@ -305,8 +209,7 @@ void AHyperionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHyperionCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AHyperionCharacter::StopJumping);
 
-	if(bToggleUse)
-	{
+	if(bToggleUse) {
 		PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AHyperionCharacter::ToggleGrab);
 	} else {
 		PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AHyperionCharacter::FBeginGrab);

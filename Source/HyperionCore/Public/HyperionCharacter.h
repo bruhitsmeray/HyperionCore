@@ -18,10 +18,7 @@ class HYPERIONCORE_API AHyperionCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AHyperionCharacter();
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Preferences")
-	bool EnableLoggingThroughKonsolePlugin = false;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Preferences")
 	bool bUseBuiltInHealthSystem = true;
 	
@@ -41,7 +38,6 @@ public:
 	UPrimitiveComponent* HitComponent;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 	bool IsWalkingV;
@@ -86,10 +82,7 @@ protected:
 	void FRotateObject(float Axis);
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Sensitivity|Mouse")
@@ -163,21 +156,4 @@ protected:
 	UPROPERTY(BlueprintReadWrite, VisibleInstanceOnly, Category = "Status")
 	bool bIsHolding = false;
 	bool IsMoving();
-
-protected:
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void ConnectToDiscord(const int64 clientID, const bool bRequireDiscordToRun);
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void DisconnectFromDiscord();
-
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void SetDiscordState(FString State);
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void SetDiscordDetails(FString Details);
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void StartDiscordTimer();
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void EndDiscordTimer();
-	UFUNCTION(BlueprintCallable, Category="Discord")
-	static void UpdateDiscordActivity();
 };

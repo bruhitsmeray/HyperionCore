@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.5.0",
+	"VersionName": "2.0.0",
 	"FriendlyName": "HyperionCore",
 	"Description": "",
 	"Category": "Miscellaneous",
@@ -24,18 +24,6 @@
 	"Plugins": [
 		{
 			"Name": "HyperionUI",
-			"Enabled": true
-		},
-		{
-			"Name": "OnlineSubsystem",
-			"Enabled": true
-		},
-		{
-			"Name": "OnlineSubsystemEOS",
-			"Enabled": true
-		},
-		{
-			"Name": "OnlineSubsystemSteam",
 			"Enabled": true
 		}
 	]
