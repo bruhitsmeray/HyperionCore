@@ -54,7 +54,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Movement")
 	FName MoveForward = "MoveForward";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Movement")
-	FName MoveSide = "MoveRight";
+	FName MoveSide = "MoveSide";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings")
 	FName Grapple = "Grapple";
 
@@ -118,9 +118,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Character|Speeds")
 	float BaseWalkSpeed = 256.0f;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Speeds")
-	float BaseWalkSpeedMultiplier = 2.2f;
+	float BaseWalkSpeedMultiplier = 2.0f;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Character|Speeds")
 	float BaseCrouchSpeed = 128.0f;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Character|Speeds")
+	float LastKnownMovSpeed;
 
 	UFUNCTION(BlueprintCallable, Category = "Character|Movement")
 	void FVerticalMove(float Value);
@@ -139,11 +141,6 @@ public:
 	void BeginSprint();
 	UFUNCTION(BlueprintCallable, Category="Character|Movement")
 	void StopSprint();
-	
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category="Character|Movement")
-	void BeginSprintOnServer();
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category="Character|Movement")
-	void StopSprintOnServer();
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Preferences")

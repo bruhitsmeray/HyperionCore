@@ -2,7 +2,6 @@
 
 
 #include "HyperionCharacter.h"
-#include "HyperionInstance.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -43,19 +42,15 @@ AHyperionCharacter::AHyperionCharacter(){
 	OuterLight->InnerConeAngle = 32.0f;
 	OuterLight->OuterConeAngle = 48.0f;
 	OuterLight->SetVisibility(false);
-	
+
+	Health = CreateDefaultSubobject<UHyperionHealthComp>(TEXT("Health"));
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
 }
 
 // Called when the game starts or when spawned
 void AHyperionCharacter::BeginPlay(){
 	Super::BeginPlay();
-	if(bUseBuiltInHealthSystem) {
-		Health = CreateDefaultSubobject<UHyperionHealthComp>(TEXT("Health"));
-		Health->SetIsReplicated(true);
-	} else {
-		UE_LOG(LogTemp, Warning, TEXT("The built-in Health system is disabled. Unless a custom Health system is used, please enable the built-in Health system."));
-	}
+	LastKnownMovSpeed = BaseWalkSpeed;
 }
 
 void AHyperionCharacter::FBeginGrab(){
@@ -179,14 +174,6 @@ void AHyperionCharacter::BeginSprint(){
 
 void AHyperionCharacter::StopSprint(){
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
-}
-
-void AHyperionCharacter::BeginSprintOnServer_Implementation(){
-	BeginSprint();
-}
-
-void AHyperionCharacter::StopSprintOnServer_Implementation(){
-	StopSprint();
 }
 
 void AHyperionCharacter::Tick(float DeltaTime){
