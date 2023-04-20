@@ -36,10 +36,5 @@ int UHyperionHealthComp::GetHealth() const {
 }
 
 void UHyperionHealthComp::SetHealth(int Value) {
-	if(Value > MaxHealth) {
-		CurrentHealth = MaxHealth;
-	} else if(Value < 0) {
-		CurrentHealth = 0;
-	}
-	CurrentHealth = Value;
+	CurrentHealth = FMath::Clamp(Value, 0, MaxHealth);
 }
