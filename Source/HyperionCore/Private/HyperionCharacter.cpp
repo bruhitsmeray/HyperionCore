@@ -95,6 +95,15 @@ void AHyperionCharacter::FGrabLocation(){
 	}
 }
 
+void AHyperionCharacter::FLaunchObject(){
+	if(bIsHolding && IsValid(HitComponent)){
+		HitComponent->SetAngularDamping(0.0f);
+		PhysicsHandle->ReleaseComponent();
+		HitComponent->AddImpulse(Camera->GetForwardVector() * (ForceMultiplier * 10000));
+		bIsHolding = false;
+	}
+}
+
 void AHyperionCharacter::FStopGrab(){
 	if(IsValid(HitComponent)) {
 		HitComponent->SetAngularDamping(0.0f);
@@ -195,8 +204,9 @@ void AHyperionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AHyperionCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AHyperionCharacter::StopJumping);
+	PlayerInputComponent->BindAction(Attack, IE_Pressed, this, &AHyperionCharacter::FLaunchObject);
 
-	if(bToggleUse) {
+	if(bToggleUse){
 		PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AHyperionCharacter::ToggleGrab);
 	} else {
 		PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AHyperionCharacter::FBeginGrab);

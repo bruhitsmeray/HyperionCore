@@ -56,6 +56,8 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings|Movement")
 	FName MoveSide = "MoveSide";
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings")
+	FName Attack = "Attack";
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Bindings")
 	FName Grapple = "Grapple";
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Interaction")
@@ -66,6 +68,9 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Interaction")
 	float OutlineRadius = 128.0f;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Interaction")
+	float ForceMultiplier = 40.0f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Character|Guns")
 	FVector GunOffset = FVector(100, 0, -10);
@@ -74,6 +79,8 @@ protected:
 	void FBeginGrab();
 	UFUNCTION(BlueprintCallable, Category="Character|Interaction")
 	void FGrabLocation();
+	UFUNCTION(BlueprintCallable, Category="Character|Interaction")
+	void FLaunchObject();
 	UFUNCTION(BlueprintCallable, Category="Character|Interaction")
 	void FStopGrab();
 	UFUNCTION(BlueprintCallable, Category="Character|Interaction")
