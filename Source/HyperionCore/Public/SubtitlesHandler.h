@@ -23,6 +23,8 @@ public:
 		float ScreenTime = 3.5f;
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Content")
 		FText Subtitle;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category="Settings")
+		bool bUseSubtitles = true;
 
 	UFUNCTION(BlueprintCallable, Category="Subtitles")
 		void ConfigSubtitlesReferences(UVerticalBox* SubtitlesBox, TSubclassOf<USubtitlesContent> SubtitlesContentClass);
